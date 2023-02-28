@@ -1,12 +1,17 @@
 {
 
   inputs.cq-flake.url = github:thelegy/cq-flake;
+  inputs.cq-wild = {
+    url = github:thelegy/cq-wild;
+    inputs.cq-flake.follows = "cq-flake";
+    inputs.nixpkgs.follows = "cq-flake/nixpkgs";
+  };
   inputs.nixpkgs = {
     url = github:NixOS/nixpkgs;
     follows = "cq-flake/nixpkgs";
   };
 
-  outputs = { nixpkgs, cq-flake, self }: {
+  outputs = { nixpkgs, cq-flake, cq-wild, self }: {
 
     overlays.default = final: prev: {
       pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
@@ -21,6 +26,7 @@
         system = "x86_64-linux";
         overlays = [
           cq-flake.overlays.default
+          cq-wild.overlays.default
           self.overlays.default
         ];
       };
@@ -33,6 +39,7 @@
         system = "x86_64-linux";
         overlays = [
           cq-flake.overlays.default
+          cq-wild.overlays.default
           self.overlays.default
         ];
       };

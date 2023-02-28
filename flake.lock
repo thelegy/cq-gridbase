@@ -59,6 +59,30 @@
         "type": "github"
       }
     },
+    "cq-wild": {
+      "inputs": {
+        "cq-flake": [
+          "cq-flake"
+        ],
+        "nixpkgs": [
+          "cq-flake",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1676581668,
+        "narHash": "sha256-JXCNa9Tf6Da4EWImhcGyh5Mt+FcS1fr5GgcnXMK27m4=",
+        "owner": "thelegy",
+        "repo": "cq-wild",
+        "rev": "a7556dfaf4d96bad4544b97f046e3bc5c058b32f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "thelegy",
+        "repo": "cq-wild",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1667395993,
@@ -158,6 +182,7 @@
     "root": {
       "inputs": {
         "cq-flake": "cq-flake",
+        "cq-wild": "cq-wild",
         "nixpkgs": [
           "cq-flake",
           "nixpkgs"

@@ -1,5 +1,6 @@
 { buildPythonPackage
 , cadquery
+, cq-wild
 }:
 
 buildPythonPackage {
@@ -11,6 +12,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     cadquery
+    cq-wild
   ];
 
 }

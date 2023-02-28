@@ -2,6 +2,7 @@
 name = "cq-gridbase"
 dependencies = [
   "cadquery",
+  "cqwild",
 ]
 dynamic = ["version", "readme"]
 
