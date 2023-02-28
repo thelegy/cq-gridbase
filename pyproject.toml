@@ -1,6 +1,7 @@
 [project]
 name = "cq-gridbase"
 dependencies = [
+  "apply_to_each_face"
   "cadquery",
   "cqwild",
 ]

@@ -46,11 +46,11 @@
         "pywrap-src": "pywrap-src"
       },
       "locked": {
-        "lastModified": 1676077036,
-        "narHash": "sha256-pkPox2vsd/AC5uQabwDLdNWd+zYwA10K6TECC0EtXy0=",
+        "lastModified": 1676580298,
+        "narHash": "sha256-emS9oekliDuiSZvGJWqQET9GQVnG6sXj3yVSUZZP3rY=",
         "owner": "thelegy",
         "repo": "cq-flake",
-        "rev": "6c2de4b5796426afd235d8da1bb5bd1c678bc0c0",
+        "rev": "e89520e6331e3663203fc1a0b6ca82e3924e3d2f",
         "type": "github"
       },
       "original": {

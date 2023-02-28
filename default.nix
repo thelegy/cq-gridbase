@@ -1,5 +1,6 @@
 { buildPythonPackage
 , cadquery
+, cq-apply-to-each-face
 , cq-wild
 }:
 
@@ -12,6 +13,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     cadquery
+    cq-apply-to-each-face
     cq-wild
   ];
 
