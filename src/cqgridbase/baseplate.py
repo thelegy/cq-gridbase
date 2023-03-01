@@ -141,3 +141,79 @@ def baseplate(
         )
     )
     return w
+
+
+@cache
+def deskclip(
+        clampThickness: float = 20,
+        clampWidth: float = 20,
+        clampAmount: float = 2,
+        screwHeight: float = 3.5,
+        wallThickness: float = 2,
+    ) -> WP:
+    plateOffset = wallThickness/2
+    flexHeight = 6*wallThickness
+    flexWidth = 2*wallThickness
+    bottomFillet = flexWidth / 3
+    plateFilletInside = 1*wallThickness
+    plateFilletOutside = 3*wallThickness
+    zFillet = wallThickness/3
+    height = clampThickness + screwHeight + 3.5/2 + wallThickness
+    width = 20
+    x = (flexWidth-plateOffset+wallThickness/2) / clampWidth
+    a = (wallThickness/2) / clampWidth
+    print(x)
+    w = (
+        WP("XY")
+
+        .sketch()
+
+        .polygon([
+            (0, height),
+            (wallThickness, height),
+            (wallThickness, -flexHeight),
+            (-flexWidth-wallThickness, -flexHeight),
+            (-flexWidth-wallThickness, -wallThickness+a*clampAmount),
+            (-clampWidth, -wallThickness+(1-x)*clampAmount),
+            (-clampWidth, (1-x)*clampAmount),
+            (-plateOffset, -x*clampAmount),
+            (-plateOffset, -wallThickness-x*clampAmount),
+            (-flexWidth, -wallThickness-a*clampAmount),
+            (-flexWidth, -flexHeight+wallThickness),
+            (0, -flexHeight+wallThickness),
+            (0, height),
+        ])
+
+        .reset().vertices(">>X[2] and (not >>Y[1])")
+        .fillet(plateFilletInside)
+
+
+        .reset().vertices(">>X[1] and (not >>Y[0])")
+        .fillet(plateFilletOutside)
+
+        .reset().vertices(">>Y[1]")
+        .fillet(bottomFillet)
+
+        .reset().vertices("<Y")
+        .fillet(bottomFillet + wallThickness)
+
+        .finalize()
+
+        .extrude(width/2, both=True)
+
+        .edges("|Z")
+        .fillet(zFillet)
+
+        .edges("<Z or >Z")
+        .chamfer(.5)
+
+        .transformed((0, 90, 0))
+        .pushPoints([
+            (-5.5, clampThickness+screwHeight),
+            (0, clampThickness+screwHeight),
+            (5.5, clampThickness+screwHeight),
+        ])
+        .circle(3.5/2)
+        .cutThruAll()
+    )
+    return w
