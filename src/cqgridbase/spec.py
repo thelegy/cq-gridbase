@@ -32,6 +32,19 @@ class Spec(NamedTuple):
         return acc
 
 
+    @cache
+    def topCut(self: 'Spec', minWidth: float) -> float:
+        acc = 0
+        for height, taper in self.profile:
+            width = height*tan(taper/180*pi)
+            if width > minWidth:
+                return acc + minWidth/tan(taper/180*pi)
+            acc += height
+            minWidth -= width
+        return 0
+
+
+
 SPEC: Optional[Spec] = None
 
 

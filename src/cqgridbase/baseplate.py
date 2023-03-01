@@ -1,7 +1,7 @@
 from . import Spec, getSpec
 from .common import magnetHole, outline, smoothHole
 
-from cqwild import Face, WP
+from cqwild import Face, PrintSettings, WP
 from functools import cache
 from math import cos, pi
 from typing import Optional
@@ -39,10 +39,13 @@ def tile(
         cornerHoleHeadDiameter: float = 0,
         cornerHoleAngle: float = 90,
         spec: Optional[Spec] = None,
+        pSettings: PrintSettings = PrintSettings(),
         ) -> WP:
     spec = getSpec() if spec is None else spec
     extra_height = spec.sizeZ if extra_height is None else extra_height
     magnetInset = spec.clearance + spec.profile_width() + spec.magnetInset
+    topCut = spec.topCut(pSettings.nozzleDiameter)
+    fillet = 1.5
     w = (
         recepticle(square=True, spec=spec)
         .faces("<Z")
@@ -61,10 +64,14 @@ def tile(
 
         .workplaneFromTagged("base_top")
         .rect(spec.sizeXY-2*magnetInset, spec.sizeXY-2*magnetInset, forConstruction=True)
-        .apply(magnetHole, spec.magnetDiameter, spec.magnedDepth, spec.magnetDiameterSub)
+        .apply(magnetHole, spec.magnetDiameter, spec.magnedDepth, spec.magnetDiameterSub, pSettings=pSettings)
+
+        .workplaneFromTagged("base_top")
+        .workplane(offset=spec.profile_height()-topCut)
+        .placeSketch(outline(square=True, spec=spec))
+        .cutBlind(topCut)
     )
     if cornerHoleHeadDiameter > 0 and cornerHoleBoreDiameter > 0:
-        fillet = .3*spec.profile_height()
         w = (
             w
 
@@ -74,7 +81,7 @@ def tile(
 
             .edges("|Z and (<X or >X) and (<Y or >Y)")
             .vertices(">Z")
-            .hole(cornerHoleHeadDiameter, spec.profile_height()-fillet)
+            .hole(cornerHoleHeadDiameter, (spec.profile_height()-topCut-fillet))
 
             .edges("|Z and (<X or >X) and (<Y or >Y)")
             .vertices(">Z")
@@ -92,6 +99,7 @@ def baseplate(
         cornerHoleHeadDiameter: float = 0,
         cornerHoleAngle: float = 90,
         spec: Optional[Spec] = None,
+        pSettings: PrintSettings = PrintSettings(),
     ) -> WP:
     spec = getSpec() if spec is None else spec
     def screwHoles(rawW: cq.cq.Workplane, _: Face) -> WP:
@@ -117,6 +125,7 @@ def baseplate(
                 cornerHoleHeadDiameter=cornerHoleHeadDiameter,
                 cornerHoleAngle=cornerHoleAngle,
                 spec=spec,
+                pSettings=pSettings,
             ).findSolid().moved,
             combine=True)
 
