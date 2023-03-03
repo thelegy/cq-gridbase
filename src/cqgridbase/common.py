@@ -10,12 +10,14 @@ import cqwild as cq
 @cache
 def outline(
         square: bool = False,
+        inner: bool = False,
         spec: Optional[Spec] = None,
         ) -> Sketch:
     spec = getSpec() if spec is None else spec
-    s = Sketch().rect(spec.sizeXY, spec.sizeXY)
+    offset = spec.clearance if inner else 0
+    s = Sketch().rect(spec.sizeXY-2*offset, spec.sizeXY-2*offset)
     if not square:
-        s = s.vertices().fillet(spec.fillet/2)
+        s = s.vertices().fillet(spec.fillet/2-offset)
     return s
 
 
