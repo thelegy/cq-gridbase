@@ -2,7 +2,7 @@ from cqwild import Location, PrintSettings, Shape, Sketch, WP
 from functools import cache
 from math import pi
 from src.cqgridbase import Spec, getSpec
-from typing import Optional
+from typing import Literal, Optional
 
 import cqwild as cq
 
@@ -19,6 +19,51 @@ def outline(
     if not square:
         s = s.vertices().fillet(spec.fillet/2-offset)
     return s
+
+
+def magnetSocket(
+        diameter: float,
+        thickness: float,
+        rotation: float = 0,
+        bottomGrid: float = 0,
+        anchor: Literal["top", "center", "bottom"] = "center",
+        pSettings: PrintSettings = PrintSettings(),
+        ) -> Shape:
+    diamClearance = diameter + .75*pSettings.nozzleDiameter
+    diamLock = diameter + .1*pSettings.nozzleDiameter
+    height = thickness + 4*pSettings.layerHeight + bottomGrid
+    offset = 0
+    if anchor == "top":
+        offset = -height/2
+    if anchor == "bottom":
+        offset = height/2
+    w = (
+        WP("XY")
+        .workplane(offset=offset)
+        .cylinder(height, diamClearance/2)
+
+        .faces(">Z")
+        .circle(diamClearance/2)
+        .circle(diamLock/2)
+        .cutBlind(-3.5*pSettings.layerHeight)
+
+        .faces(">Z")
+        .rect(diamClearance, 3.5*pSettings.nozzleDiameter)
+        .cutBlind(-2.5*pSettings.layerHeight)
+    )
+    if bottomGrid > 0:
+        w = (
+            w
+            .faces("<Z")
+            .circle(diamClearance/2)
+            .circle(diamLock/2)
+            .cutBlind(bottomGrid)
+
+            .faces("<Z")
+            .rect(diamClearance, 3.5*pSettings.nozzleDiameter)
+            .cutBlind(bottomGrid)
+        )
+    return w.rotateAboutCenter((0, 0, 1), rotation).findSolid()
 
 
 def magnetHole(
