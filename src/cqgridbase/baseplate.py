@@ -162,7 +162,6 @@ def deskclip(
     width = 20
     x = (flexWidth-plateOffset+wallThickness/2) / clampWidth
     a = (wallThickness/2) / clampWidth
-    print(x)
     w = (
         WP("XY")
 
