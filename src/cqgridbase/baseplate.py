@@ -11,7 +11,7 @@ import cqwild as cq
 
 
 @cache
-def recepticle(
+def socket(
         square: bool = False,
         spec: Optional[Spec] = None,
         ) -> WP:
@@ -47,7 +47,7 @@ def tile(
     topCut = spec.topCut(pSettings.nozzleDiameter)
     fillet = 1.5
     w = (
-        recepticle(square=True, spec=spec)
+        socket(square=True, spec=spec)
         .faces("<Z")
         .tag("base_top")
         .placeSketch(
